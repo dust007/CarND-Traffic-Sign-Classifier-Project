@@ -16,9 +16,7 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./examples/visualization.jpg "Visualization"
-[image2]: ./examples/grayscale.jpg "Grayscaling"
-[image3]: ./examples/random_noise.jpg "Random Noise"
+[image1]: ./examples/distribution.png "Distribution"
 [image4]: ./web_pics/Capture1.PNG "Traffic Sign 1"
 [image5]: ./web_pics/Capture2.PNG "Traffic Sign 2"
 [image6]: ./web_pics/Capture3.PNG "Traffic Sign 3"
@@ -40,58 +38,40 @@ You're reading it! and here is a link to my [project code](./Traffic_Sign_Classi
 * The shape of a traffic sign image is 1024(32*32)
 * The number of unique classes/labels in the data set is 43
 
-#### 2. Include an exploratory visualization of the dataset.
-
-Here is an exploratory visualization of the data set. It is a bar chart showing how the data ...
+#### 2. Here is an exploratory visualization of the train data set. It is a bar chart showing how the data is distributed on different traffic signs.
 
 ![alt text][image1]
 
 ### Design and Test a Model Architecture
 
-#### 1. Describe how you preprocessed the image data. What techniques were chosen and why did you choose these techniques? Consider including images showing the output of each preprocessing technique. Pre-processing refers to techniques such as converting to grayscale, normalization, etc. (OPTIONAL: As described in the "Stand Out Suggestions" part of the rubric, if you generated additional data for training, describe why you decided to generate additional data, how you generated the data, and provide example images of the additional data. Then describe the characteristics of the augmented training set like number of images in the set, number of images for each class, etc.)
+#### 1. Describe how you preprocessed the image data. What techniques were chosen and why did you choose these techniques? 
 
-As a first step, I decided to convert the images to grayscale because ...
-
-Here is an example of a traffic sign image before and after grayscaling.
-
-![alt text][image2]
-
-As a last step, I normalized the image data because ...
-
-I decided to generate additional data because ... 
-
-To add more data to the the data set, I used the following techniques because ... 
-
-Here is an example of an original image and an augmented image:
-
-![alt text][image3]
-
-The difference between the original data set and the augmented data set is the following ... 
+I normalized the image data because ...
 
 
 #### 2. My final model consisted of the following layers:
 
 | Layer         		|     Description	        					| 
 |:---------------------:|:---------------------------------------------:| 
-| Input         		| 32x32x3 RGB image   							| 
+| Input         	| 32x32x3 RGB image   							| 
 | Convolution 5x5     	| 1x1 stride, valid padding, outputs 28x28x16 	|
-| RELU					|												|
+| RELU			|												|
 | Max pooling	      	| 2x2 stride,  outputs 14x14x16 				|
-| dropout				| keep_prob 0.6									|
+| dropout		| keep_prob 0.6									|
 | Convolution 5x5     	| 1x1 stride, valid padding, outputs 10x10x32 	|
-| RELU					|												|
+| RELU			|												|
 | Max pooling	      	| 2x2 stride,  outputs 5x5x16 					|
-| dropout				| keep_prob 0.6									|
-| flatten				| outputs 400									|
-| Fully connected		| outputs 512  									|
-| RELU					| 												|
-| dropout				| keep_prob 0.6									|
-| Fully connected		| outputs 128  									|
-| RELU					| 												|
-| dropout				| keep_prob 0.6									|
-| Fully connected		| outputs 43  									|
-| softmax				|												|
-| <END>					|												|
+| dropout		| keep_prob 0.6									|
+| flatten		| outputs 400									|
+| Fully connected	| outputs 512  									|
+| RELU			| 												|
+| dropout		| keep_prob 0.6									|
+| Fully connected	| outputs 128  									|
+| RELU			| 												|
+| dropout		| keep_prob 0.6									|
+| Fully connected	| outputs 43  									|
+| softmax		|												|
+| <END>			|												|
  
 
 
@@ -124,35 +104,72 @@ If a well known architecture was chosen:
 ![web pic1][image4] ![web pic2][image5] ![web pic3][image6] 
 ![web pic4][image7] ![web pic5][image8]
 
-The first image might be difficult to classify because ...
 
-#### 2. Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set (OPTIONAL: Discuss the results in more detail as described in the "Stand Out Suggestions" part of the rubric).
-
-Here are the results of the prediction:
+#### 2. Here are the results of the prediction:
 
 | Image			        	|     Prediction	        					| 
 |:-------------------------:|:---------------------------------------------:| 
-| Road narrows on the right	| Road narrows on the right						| 
-| General caution  			| General caution								|
+| General caution  		| General caution								|
 | Wild animals crossing		| Wild animals crossing							|
+| Road narrows on the right	| Road narrows on the right						| 
 | Slippery road	      		| Slippery road					 				|
-| Yield						| Yield      									|
+| Priority road			| Yield      									|
 
 
 The model was able to correctly guess 5 of the 5 traffic signs, which gives an accuracy of 100%. This compares favorably to the accuracy on the test set of 96%
 
 #### 3. The code for making predictions on my final model is located in the 11th cell of the Ipython notebook.
+The top five soft max probabilities were
 
-For the first image, the model is relatively sure that this is a stop sign (probability of 0.6), and the image does contain a stop sign. The top five soft max probabilities were
+For the first image:
+web_pic: General caution
+| Probability         	|     Prediction	        					| 
+|:---------------------:|:---------------------------------------------:| 
+| 1.0000000 | General caution |
+| 0.0000000 | Traffic signals |
+| 0.0000000 | Speed limit (20km/h) |
+| 0.0000000 | Speed limit (30km/h) |
+| 0.0000000 | Speed limit (50km/h) |
+
+For the second image:
+web_pic: wild animals crossing
+| Probability         	|     Prediction	        					| 
+|:---------------------:|:---------------------------------------------:| 
+| 1.0000000 | Wild animals crossing |
+| 0.0000000 | Double curve |
+| 0.0000000 | General caution |
+| 0.0000000 | Slippery road |
+| 0.0000000 | Dangerous curve to the left |
+
+For the third image:
+web_pic: road narrows on the right
+| Probability         	|     Prediction	        					| 
+|:---------------------:|:---------------------------------------------:| 
+| 0.9977132 | Road narrows on the right |
+| 0.0016438 | General caution |
+| 0.0006019 | Pedestrians |
+| 0.0000292 | Bicycles crossing |
+| 0.0000087 | Right-of-way at the next intersection |
+
+For the forth image:
+web_pic: slippery road
 
 | Probability         	|     Prediction	        					| 
 |:---------------------:|:---------------------------------------------:| 
-| .60         			| Road narrows on the right   									| 
-| .20     				| U-turn 										|
-| .05					| Yield											|
-| .04	      			| Bumpy Road					 				|
-| .01				    | Slippery Road      							|
+| 0.9999714 | Slippery road |
+| 0.0000286 | Dangerous curve to the left |
+| 0.0000000 | Bicycles crossing |
+| 0.0000000 | Road narrows on the right |
+| 0.0000000 | Dangerous curve to the right |
 
+For the fifth image:
+web_pic: priority road
 
-For the second image ... 
+| Probability         	|     Prediction	        					| 
+|:---------------------:|:---------------------------------------------:| 
+| 0.5161353 | Yield |
+| 0.3686315 | Priority road |
+| 0.0820100 | No entry |
+| 0.0063870 | Speed limit (30km/h) |
+| 0.0063788 | Stop |
 
