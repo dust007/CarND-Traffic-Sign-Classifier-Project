@@ -46,7 +46,7 @@ You're reading it! and here is a link to my [project code](./Traffic_Sign_Classi
 
 #### 1. Describe how you preprocessed the image data. What techniques were chosen and why did you choose these techniques? 
 
-I normalized the image data because ...
+I normalized the image data using (pixel - 128)/128 because normalization of x to (0, 1) circle will help NN find optimal solution more easily.
 
 
 #### 2. My final model consisted of the following layers:
@@ -77,7 +77,7 @@ I normalized the image data because ...
 
 #### 3. To train the model, I used an optimizer of "AdamOptimizer", the batch size of 256, number of epochs of 100, the learning rate of 0.001 and dropout keep_prob of 0.6.
 
-#### 4. Describe the approach taken for finding a solution and getting the validation set accuracy to be at least 0.93. Include in the discussion the results on the training, validation and test sets and where in the code these were calculated. Your approach may have been an iterative process, in which case, outline the steps you took to get to the final solution and why you chose those steps. Perhaps your solution involved an already well known implementation or architecture. In this case, discuss why you think the architecture is suitable for the current problem.
+#### 4. Describe the approach. 
 
 My final model results were:
 * training set accuracy of 0.9992
@@ -85,16 +85,11 @@ My final model results were:
 * test set accuracy of 0.9600
 
 If an iterative approach was chosen:
-* What was the first architecture that was tried and why was it chosen?
-* What were some problems with the initial architecture?
-* How was the architecture adjusted and why was it adjusted? Typical adjustments could include choosing a different model architecture, adding or taking away layers (pooling, dropout, convolution, etc), using an activation function or changing the activation function. One common justification for adjusting an architecture would be due to overfitting or underfitting. A high accuracy on the training set but low accuracy on the validation set indicates over fitting; a low accuracy on both sets indicates under fitting.
-* Which parameters were tuned? How were they adjusted and why?
-* What are some of the important design choices and why were they chosen? For example, why might a convolution layer work well with this problem? How might a dropout layer help with creating a successful model?
-
-If a well known architecture was chosen:
-* What architecture was chosen?
-* Why did you believe it would be relevant to the traffic sign application?
-* How does the final model's accuracy on the training, validation and test set provide evidence that the model is working well?
+* The first architecture that was tried was LeNet from previous course, because it works good on mnist data.
+* The training and validation accuracy were not so good, less than 0.9, especailly validation accuracy was less than 0.8.
+* The low training accuracy was strange, it meant the problem may be on the dataset itself. After a few rounds of debug, it turned out the normalization process was not correct, the data loaded in was unsigned int, therefore pixel-128 made it discreted, even I wanted the data to be centered to zero.
+* After normalization is fixed, training accuracy is approaching 0.9999..., but validation accuracy is just above 0.9. It indicates needing of regularization. So dropout was added to LeNet. 
+* Batch size, dropout prob, CNN/FC size were tuned to find the best solution.
  
 
 ### Test a Model on New Images
@@ -116,7 +111,8 @@ If a well known architecture was chosen:
 | Priority road			| Yield      									|
 
 
-The model was able to correctly guess 5 of the 5 traffic signs, which gives an accuracy of 100%. This compares favorably to the accuracy on the test set of 96%
+The model was able to correctly guess 4 of the 5 traffic signs, which gives an accuracy of 100%. This compares favorably to the accuracy on the test set of 96%.
+The wrong image was from a different source, and it was a Priority road sign with some dirty drawing on it. I intended to include this picture to see how robust the model is. It turned out for image with a different color pattern, and partially covered, the trained model did not work well. The solution could be to convert image to grayscale before training, and do augumentation on images to create more data sample.
 
 #### 3. The code for making predictions on my final model is located in the 11th cell of the Ipython notebook.
 The top five soft max probabilities were
@@ -124,7 +120,7 @@ The top five soft max probabilities were
 For the first image:
 web_pic: General caution
 | Probability         	|     Prediction	        					| 
-|:---------------------:|:---------------------------------------------:| 
+|:---------------------:|:---------------------------------------------:|
 | 1.0000000 | General caution |
 | 0.0000000 | Traffic signals |
 | 0.0000000 | Speed limit (20km/h) |
@@ -134,7 +130,7 @@ web_pic: General caution
 For the second image:
 web_pic: wild animals crossing
 | Probability         	|     Prediction	        					| 
-|:---------------------:|:---------------------------------------------:| 
+|:---------------------:|:---------------------------------------------:|
 | 1.0000000 | Wild animals crossing |
 | 0.0000000 | Double curve |
 | 0.0000000 | General caution |
@@ -144,7 +140,7 @@ web_pic: wild animals crossing
 For the third image:
 web_pic: road narrows on the right
 | Probability         	|     Prediction	        					| 
-|:---------------------:|:---------------------------------------------:| 
+|:---------------------:|:---------------------------------------------:|
 | 0.9977132 | Road narrows on the right |
 | 0.0016438 | General caution |
 | 0.0006019 | Pedestrians |
@@ -155,7 +151,7 @@ For the forth image:
 web_pic: slippery road
 
 | Probability         	|     Prediction	        					| 
-|:---------------------:|:---------------------------------------------:| 
+|:---------------------:|:---------------------------------------------:|
 | 0.9999714 | Slippery road |
 | 0.0000286 | Dangerous curve to the left |
 | 0.0000000 | Bicycles crossing |
@@ -166,7 +162,7 @@ For the fifth image:
 web_pic: priority road
 
 | Probability         	|     Prediction	        					| 
-|:---------------------:|:---------------------------------------------:| 
+|:---------------------:|:---------------------------------------------:|
 | 0.5161353 | Yield |
 | 0.3686315 | Priority road |
 | 0.0820100 | No entry |
