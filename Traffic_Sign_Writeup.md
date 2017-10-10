@@ -35,7 +35,7 @@ You're reading it! and here is a link to my [project code](./Traffic_Sign_Classi
 * The size of training set is 34799
 * The size of the validation set is 4410
 * The size of test set is 12630
-* The shape of a traffic sign image is 1024(32*32)
+* The shape of a traffic sign image is 3072(32*32*3)
 * The number of unique classes/labels in the data set is 43
 
 #### 2. Here is an exploratory visualization of the train data set. It is a bar chart showing how the data is distributed on different traffic signs.
@@ -75,26 +75,29 @@ I normalized the image data using (pixel - 128)/128 because normalization of x t
  
 
 
-#### 3. To train the model, I used an optimizer of "AdamOptimizer", the batch size of 256, number of epochs of 100, the learning rate of 0.001 and dropout keep_prob of 0.6.
+#### 3. To train the model, I used an optimizer of "AdamOptimizer", the batch size of 128, number of epochs of 100(with early stopping), the learning rate of 0.001 and dropout keep_prob of 0.6.
 
 #### 4. Describe the approach. 
 
 My final model results were:
-* training set accuracy of 0.9992
-* validation set accuracy of 0.9701 
-* test set accuracy of 0.9600
+* training set accuracy of 0.9937
+* validation set accuracy of 0.9565 
+* test set accuracy of 0.9459
 
 If an iterative approach was chosen:
 * The first architecture that was tried was LeNet from previous course, because it works good on mnist data.
 * The training and validation accuracy were not so good, less than 0.9, especailly validation accuracy was less than 0.8.
 * The low training accuracy was strange, it meant the problem may be on the dataset itself. After a few rounds of debug, it turned out the normalization process was not correct, the data loaded in was unsigned int, therefore pixel-128 made it discreted, even I wanted the data to be centered to zero.
-* After normalization is fixed, training accuracy is approaching 0.9999..., but validation accuracy is just above 0.9. It indicates needing of regularization. So dropout was added to LeNet. 
+* After normalization is fixed, training accuracy is approaching 0.99..., but validation accuracy is just above 0.9. It indicates needing of regularization. So dropout was added to LeNet. 
 * Batch size, dropout prob, CNN/FC size were tuned to find the best solution.
+* Validation error reached maximum around 10-20 epoches, so early stopping is used to prevent overfitting. When valid error was less then average of 5 former passes, training stopped.
  
 
 ### Test a Model on New Images
 
 #### 1. Here are five German traffic signs that I found on the web:
+
+All images are from google search image of "German traffic signs". The first 4 signs look normal and regular, while the last one is tricky, because it has some "drawing" on it to partially covering the real sign. I intended to include this picture to see how robust the model is. It turned out the trained model did not work well on this particular image.
 
 ![web pic1][image4] ![web pic2][image5] ![web pic3][image6] 
 ![web pic4][image7] ![web pic5][image8]
@@ -112,7 +115,7 @@ If an iterative approach was chosen:
 
 
 The model was able to correctly guess 4 of the 5 traffic signs, which gives an accuracy of 100%. This compares favorably to the accuracy on the test set of 96%.
-The wrong image was from a different source, and it was a Priority road sign with some dirty drawing on it. I intended to include this picture to see how robust the model is. It turned out for image with a different color pattern, and partially covered, the trained model did not work well. The solution could be to convert image to grayscale before training, and do augumentation on images to create more data sample.
+The potential solution to improve the accuracy could be to convert image to grayscale before training, and do augumentation on images to create more data sample
 
 #### 3. The code for making predictions on my final model is located in the 11th cell of the Ipython notebook.
 The top five soft max probabilities were
@@ -121,51 +124,51 @@ For the first image:
 web_pic: General caution
 | Probability         	|     Prediction	        					| 
 |:---------------------:|:---------------------------------------------:|
-| 1.0000000 | General caution |
-| 0.0000000 | Traffic signals |
-| 0.0000000 | Speed limit (20km/h) |
-| 0.0000000 | Speed limit (30km/h) |
-| 0.0000000 | Speed limit (50km/h) |
+| 0.9999996 | General caution |
+| 0.0000003 | Traffic signals |
+| 0.0000000 | Pedestrians |
+| 0.0000000 | Road narrows on the right |
+| 0.0000000 | Right-of-way at the next intersection |
 
 For the second image:
 web_pic: wild animals crossing
 | Probability         	|     Prediction	        					| 
 |:---------------------:|:---------------------------------------------:|
-| 1.0000000 | Wild animals crossing |
-| 0.0000000 | Double curve |
-| 0.0000000 | General caution |
-| 0.0000000 | Slippery road |
-| 0.0000000 | Dangerous curve to the left |
+| 0.9996840 | Wild animals crossing |
+| 0.0003065 | Double curve |
+| 0.0000066 | Dangerous curve to the left |
+| 0.0000028 | Slippery road |
+| 0.0000001 | Road work |
 
 For the third image:
 web_pic: road narrows on the right
 | Probability         	|     Prediction	        					| 
 |:---------------------:|:---------------------------------------------:|
-| 0.9977132 | Road narrows on the right |
-| 0.0016438 | General caution |
-| 0.0006019 | Pedestrians |
-| 0.0000292 | Bicycles crossing |
-| 0.0000087 | Right-of-way at the next intersection |
+| 0.8464786 | Road narrows on the right |
+| 0.1054309 | Pedestrians |
+| 0.0270775 | General caution |
+| 0.0056322 | Right-of-way at the next intersection |
+| 0.0044994 | Road work |
 
 For the forth image:
 web_pic: slippery road
 
 | Probability         	|     Prediction	        					| 
 |:---------------------:|:---------------------------------------------:|
-| 0.9999714 | Slippery road |
-| 0.0000286 | Dangerous curve to the left |
-| 0.0000000 | Bicycles crossing |
-| 0.0000000 | Road narrows on the right |
-| 0.0000000 | Dangerous curve to the right |
+| 0.9303685 | Slippery road |
+| 0.0696108 | Dangerous curve to the right |
+| 0.0000207 | Dangerous curve to the left |
+| 0.0000000 | Right-of-way at the next intersection |
+| 0.0000000 | No passing |
 
 For the fifth image:
 web_pic: priority road
 
 | Probability         	|     Prediction	        					| 
 |:---------------------:|:---------------------------------------------:|
-| 0.5161353 | Yield |
-| 0.3686315 | Priority road |
-| 0.0820100 | No entry |
-| 0.0063870 | Speed limit (30km/h) |
-| 0.0063788 | Stop |
+| 0.6092759 | Yield |
+| 0.0857972 | Speed limit (30km/h) |
+| 0.0636047 | Speed limit (50km/h) |
+| 0.0575905 | Keep right |
+| 0.0427484 | Stop |
 
